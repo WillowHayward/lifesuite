@@ -1,8 +1,11 @@
+use chrono::{DateTime, Local};
+
 use crate::tag::{Tag, parse_tag};
 use crate::person::{Person, parse_person};
 use crate::place::{Place, parse_location};
 
 pub struct Log {
+    pub date: DateTime<Local>,
     pub text: String,
     pub tags: Vec<Tag>,
     pub people: Vec<Person>,
@@ -10,6 +13,8 @@ pub struct Log {
 }
 
 pub fn build_log(log: &[String]) -> Log {
+    let date = Local::now();
+    let text = log.join(" ");
     let mut tags: Vec<Tag> = Vec::new();
     let mut people: Vec<Person> = Vec::new();
     let mut places: Vec<Place> = Vec::new();
@@ -27,7 +32,8 @@ pub fn build_log(log: &[String]) -> Log {
     }
 
     return Log {
-        text: log.join(" "),
+        date,
+        text,
         tags,
         people,
         places,

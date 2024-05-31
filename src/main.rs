@@ -20,6 +20,7 @@ fn main() {
             let log = build_log(&args[2..]);
 
             println!("Log: {}", log.text);
+            println!("Date: {}", log.date.format("%Y-%m-%d %H:%M:%S"));
             for tag in log.tags {
                 println!("    Tag: {}", tag.name);
                 for value in tag.values {
