@@ -10,6 +10,10 @@ mod place;
 mod settings;
 mod tag;
 
+mod traits {
+    pub mod named;
+}
+
 use io::write_log;
 use log::build_log;
 use std::env;

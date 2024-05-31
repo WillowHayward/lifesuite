@@ -1,7 +1,15 @@
+use crate::traits::named::Named;
+
 #[derive(Serialize, Deserialize)]
 pub struct Tag {
     pub name: String,
     pub values: Vec<String>,
+}
+
+impl Named for Tag {
+    fn name(&self) -> &str {
+        &self.name
+    }
 }
 
 pub fn parse_tag(full_tag: &str) -> Tag {

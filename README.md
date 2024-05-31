@@ -21,11 +21,11 @@ A log is a journal entry.
 
 ## Tag
 
-A tag is a label for a log that can optionally have a value attached to it. The syntax for this is either `+metric`, `+metric:value`, or `+metric:value:value:...:value` where `metric` can be any alphanumeric string of text, and `value` is whatever value (text or number) you can to store for that metric in the particular log. A tag can have any number of values attached to it. Values are stored positionally - `+tag:1:2:3` will always have a first value 1, a second value of 2, and a third value of 3.
+A tag is a label for a log that can optionally have a value attached to it. The syntax for this is either `+metric` or `+metric:value`, where `metric` can be any alphanumeric string of text, and `value` is whatever value (text or number) you can to store for that metric in the particular log.
 
 ## Person
 
-A person is someone who might be mentioned in a log. The syntax for this is `@name`, `@organisation.name`, or `@organisation.suborganisation.name` where `name`, `organisation`, and `suborganisation` can be any alphanumeric string of text. You can have as many suborganisations as you please.
+A person is someone who might be mentioned in a log. The syntax for this is `@name` or `@organisation.name`, where `name` and `organisation` can be any alphanumeric string of text.
 
 ## Location
 
