@@ -1,3 +1,4 @@
+#[derive(Serialize)]
 pub struct Person {
     pub name: String,
 }

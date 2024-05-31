@@ -1,3 +1,4 @@
+#[derive(Serialize)]
 pub struct Tag {
     pub name: String,
     pub values: Vec<String>,

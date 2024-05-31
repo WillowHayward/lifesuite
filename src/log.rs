@@ -5,6 +5,7 @@ use crate::tag::{Tag, parse_tag};
 use crate::person::{Person, parse_person};
 use crate::place::{Place, parse_location};
 
+#[derive(Serialize)]
 pub struct Log {
     pub id: Uuid,
     pub date: DateTime<Local>,

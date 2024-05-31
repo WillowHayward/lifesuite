@@ -1,10 +1,15 @@
+#[macro_use]
+extern crate serde_derive;
+extern crate serde;
+extern crate serde_json;
+
 mod log;
 mod person;
 mod place;
 mod tag;
 
 use log::build_log;
-use std::env;
+use std::{env, fs};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -18,6 +23,13 @@ fn main() {
     match args[1].as_str() {
         "log" => {
             let log = build_log(&args[2..]);
+            let json = serde_json::to_string(&log).unwrap_or("".to_string());
+
+            if json == "" {
+                println!("Failed to convert log to JSON");
+                return;
+            }
+            println!("{}", json);
 
             println!("Log {}", log.id);
             println!("    Entry: {}", log.text);
@@ -34,6 +46,9 @@ fn main() {
             for place in log.places {
                 println!("    Place: {}", place.name);
             }
+
+            let path = format!("/tmp/life/{}.json", log.id.to_string());
+            fs::write(path, &json).expect("Unable to write file");
         }
         _ => display_logs(&args[1..]),
     }
