@@ -26,3 +26,7 @@ A tag is a label for a log that can optionally have a value attached to it. The 
 ## Person
 
 A person is someone who might be mentioned in a log. The syntax for this is `@name`, `@organisation.name`, or `@organisation.suborganisation.name` where `name`, `organisation`, and `suborganisation` can be any alphanumeric string of text. You can have as many suborganisations as you please.
+
+## Location
+
+A location is a place that might be mentioned in a log. The syntax for this is `%location`, where `location` can be any alphanumeric string of text
