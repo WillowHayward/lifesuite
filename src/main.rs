@@ -23,13 +23,13 @@ struct Log {
     text: String,
     tags: Vec<Tag>,
     people: Vec<Person>,
-    locations: Vec<Location>,
+    places: Vec<Place>,
 }
 
 fn build_log(log: &[String]) {
     let mut tags: Vec<Tag> = Vec::new();
     let mut people: Vec<Person> = Vec::new();
-    let mut locations: Vec<Location> = Vec::new();
+    let mut places: Vec<Place> = Vec::new();
     for part in log {
         if part.starts_with("+") {
             let tag = parse_tag(&part[1..]);
@@ -38,8 +38,8 @@ fn build_log(log: &[String]) {
             let person = parse_person(&part[1..]);
             people.push(person);
         } else if part.starts_with("%") {
-            let location = parse_location(&part[1..]);
-            locations.push(location);
+            let place = parse_location(&part[1..]);
+            places.push(place);
         }
     }
 
@@ -47,7 +47,7 @@ fn build_log(log: &[String]) {
         text: log.join(" "),
         tags,
         people,
-        locations,
+        places,
     };
 
     println!("Log: {}", log.text);
@@ -60,8 +60,8 @@ fn build_log(log: &[String]) {
     for person in log.people {
         println!("    tPerson: {}", person.name);
     }
-    for location in log.locations {
-        println!("    tLocation: {}", location.name);
+    for place in log.places {
+        println!("    tPlace: {}", place.name);
     }
 }
 
@@ -90,12 +90,12 @@ fn parse_person(person: &str) -> Person {
     };
 }
 
-struct Location {
+struct Place {
     name: String,
 }
 
-fn parse_location(location: &str) -> Location {
-    return Location {
+fn parse_location(location: &str) -> Place {
+    return Place {
         name: location.to_string(),
     };
 }
