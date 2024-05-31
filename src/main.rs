@@ -27,22 +27,6 @@ fn main() {
         "log" => {
             let log = build_log(&args[2..]);
 
-            /*println!("Log {}", log.id);
-            println!("    Entry: {}", log.text);
-            println!("    Date: {}", log.date.format("%Y-%m-%d %H:%M:%S"));
-            for tag in &log.tags {
-                println!("    Tag: {}", tag.name);
-                for value in &tag.values {
-                    println!("        Value: {}", value);
-                }
-            }
-            for person in &log.people {
-                println!("    Person: {}", person.name);
-            }
-            for place in &log.places {
-                println!("    Place: {}", place.name);
-            }*/
-
             write_log(&log);
             println!("Wrote log {} to file", log.id);
         }
@@ -51,5 +35,23 @@ fn main() {
 }
 
 fn display_logs(search: &[String]) {
-    println!("Displaying logs relating to '{}'", search.join(" "))
+    println!("Displaying logs relating to '{}'", search.join(" "));
+    for log in search {
+        let log = io::read_log(log);
+        println!("Log {}", log.id);
+        println!("    Entry: {}", log.text);
+        println!("    Date: {}", log.date.format("%Y-%m-%d %H:%M:%S"));
+        for tag in &log.tags {
+            println!("    Tag: {}", tag.name);
+            for value in &tag.values {
+                println!("        Value: {}", value);
+            }
+        }
+        for person in &log.people {
+            println!("    Person: {}", person.name);
+        }
+        for place in &log.places {
+            println!("    Place: {}", place.name);
+        }
+    }
 }
