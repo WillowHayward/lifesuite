@@ -13,12 +13,6 @@ fn main() {
         "log" => build_log(&args[2..]),
         _ => display_logs(&args[1..]),
     }
-
-    /*let log = HashMap::new();
-    let tags =
-    for arg in args {
-        println!("{}", arg);
-    }*/
 }
 
 fn display_logs(search: &[String]) {
@@ -29,11 +23,13 @@ struct Log {
     text: String,
     tags: Vec<Tag>,
     people: Vec<Person>,
+    locations: Vec<Location>,
 }
 
 fn build_log(log: &[String]) {
     let mut tags: Vec<Tag> = Vec::new();
     let mut people: Vec<Person> = Vec::new();
+    let mut locations: Vec<Location> = Vec::new();
     for part in log {
         if part.starts_with("+") {
             let tag = parse_tag(&part[1..]);
@@ -41,6 +37,9 @@ fn build_log(log: &[String]) {
         } else if part.starts_with("@") {
             let person = parse_person(&part[1..]);
             people.push(person);
+        } else if part.starts_with("%") {
+            let location = parse_location(&part[1..]);
+            locations.push(location);
         }
     }
 
@@ -48,6 +47,7 @@ fn build_log(log: &[String]) {
         text: log.join(" "),
         tags,
         people,
+        locations,
     };
 
     println!("Log: {}", log.text);
@@ -58,7 +58,10 @@ fn build_log(log: &[String]) {
         }
     }
     for person in log.people {
-        println!("\tPerson: {}", person.name);
+        println!("    tPerson: {}", person.name);
+    }
+    for location in log.locations {
+        println!("    tLocation: {}", location.name);
     }
 }
 
@@ -84,5 +87,15 @@ struct Person {
 fn parse_person(person: &str) -> Person {
     return Person {
         name: person.to_string(),
+    };
+}
+
+struct Location {
+    name: String,
+}
+
+fn parse_location(location: &str) -> Location {
+    return Location {
+        name: location.to_string(),
     };
 }
