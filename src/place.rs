@@ -1,4 +1,4 @@
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Place {
     pub name: String,
 }
