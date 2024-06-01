@@ -26,19 +26,19 @@ pub fn read_log(id: &str) -> Log {
 }
 
 struct Index {
-    tags: HashMap<String, Vec<String>>,
-    people: HashMap<String, Vec<String>>,
-    places: HashMap<String, Vec<String>>,
+    pub tags: HashMap<String, Vec<String>>,
+    pub people: HashMap<String, Vec<String>>,
+    pub places: HashMap<String, Vec<String>>,
 }
 
-enum NamedIndex {
+pub enum NamedIndex {
     Tags,
     People,
     Places,
 }
 
 impl NamedIndex {
-    fn to_string(&self) -> &'static str {
+    pub fn to_string(&self) -> &'static str {
         match *self {
             NamedIndex::Tags => "tags",
             NamedIndex::People => "people",
@@ -65,7 +65,7 @@ fn add_to_named_index(index_type: &str, id: &str, names: Vec<String>) {
         let mut values: Vec<String>;
         match index.get(&name) {
             Some(v) => values = v.clone(),
-            None => values = Vec::new()
+            None => values = Vec::new(),
         }
         values.push(id.to_string());
         index.insert(name, values);
@@ -73,7 +73,7 @@ fn add_to_named_index(index_type: &str, id: &str, names: Vec<String>) {
     write_named_index(index_type, index);
 }
 
-fn get_full_index() -> Index {
+pub fn get_full_index() -> Index {
     return Index {
         tags: get_named_index(NamedIndex::Tags.to_string()),
         people: get_named_index(NamedIndex::People.to_string()),
@@ -87,7 +87,7 @@ fn write_full_index(index: Index) {
     write_named_index(NamedIndex::Places.to_string(), index.places);
 }
 
-fn get_named_index(named_index: &str) -> HashMap<String, Vec<String>> {
+pub fn get_named_index(named_index: &str) -> HashMap<String, Vec<String>> {
     let path = format!("{}/{}.json", EnvVar::HoraceDir.get(), named_index);
     if !fs::metadata(&path).is_ok() {
         return HashMap::new();
