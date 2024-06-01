@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use uuid::Uuid;
 
-use crate::io::{get_full_index, get_named_index, read_log, NamedIndex};
+use crate::io::{get_named_index, read_log, NamedIndex};
 use crate::log::Log;
 
 pub fn search_logs(search: &[String]) -> Vec<Log> {
@@ -20,8 +20,8 @@ pub fn search_log_ids(search: &[String]) -> HashSet<String> {
     let mut ids: HashSet<String> = HashSet::new();
     // TODO: If these could be lazy loaded that'd be neat
     let tags = get_named_index(NamedIndex::Tags.to_string());
-    let people = get_named_index(NamedIndex::Tags.to_string());
-    let places = get_named_index(NamedIndex::Tags.to_string());
+    let people = get_named_index(NamedIndex::People.to_string());
+    let places = get_named_index(NamedIndex::Places.to_string());
     for term in search {
         println!("Checking term '{:?}'", term);
         let term_str = term.as_str();
@@ -53,7 +53,7 @@ pub fn search_log_ids(search: &[String]) -> HashSet<String> {
                     ids.insert(id.clone());
                 }
             }
-            _ => {},
+            _ => {}
         }
         /*for index in vec![NamedIndex::Tags, NamedIndex::People, NamedIndex::Places] {
             let index = get_named_index(index.to_string());
