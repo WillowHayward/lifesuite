@@ -1,5 +1,4 @@
 [workspace]
 
-members = [
-    "journal"
-]
+members = [ "common", "journal", "journal-cli", "journal-lib"]
+resolver = "2"
