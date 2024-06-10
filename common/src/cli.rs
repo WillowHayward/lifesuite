@@ -1,4 +1,5 @@
 use std::env;
+use crate::settings::EnvVar;
 
 pub enum Command {
     Log,
@@ -11,6 +12,7 @@ pub struct ParsedArguments {
 }
 
 pub fn parse_args() -> ParsedArguments {
+    EnvVar::HoraceRc.get();
     let args: Vec<String> = env::args().collect();
     let command: Command;
     let mut parameters: Vec<String> = Vec::new();

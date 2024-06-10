@@ -1,6 +1,9 @@
 [package]
-name = "lifesuite-journal"
+name = "lifesuite-journal-cli"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+lifesuite_common = { path = "../common" }
+lifesuite_journal_lib = { path = "../journal-lib" }

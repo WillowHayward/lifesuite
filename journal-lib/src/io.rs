@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 
 use crate::log::Log;
-use crate::settings::EnvVar;
+use lifesuite_common::settings::EnvVar;
 use crate::traits::named::Named;
 
 pub fn write_log(log: &Log) {
