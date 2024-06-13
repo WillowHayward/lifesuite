@@ -1,35 +1,27 @@
-use std::env;
-use crate::settings::EnvVar;
-
-pub enum Command {
-    Log,
-    Search,
-}
+use std::collections::HashMap;
 
 pub struct ParsedArguments {
-    pub command: Command,
+    pub command: fn(Vec<String>),
     pub parameters: Vec<String>,
 }
 
-pub fn parse_args() -> ParsedArguments {
-    EnvVar::HoraceRc.get();
-    let args: Vec<String> = env::args().collect();
-    let command: Command;
-    let mut parameters: Vec<String> = Vec::new();
-    if args.len() == 1 {
-        command = Command::Search;
+pub fn parse_args(
+    args: Vec<String>,
+    commands: HashMap<String, fn(Vec<String>)>, // NOTE: Map must have "" for default command
+) -> ParsedArguments {
+    let command: String;
+    if args.len() == 0 {
+        command = String::from("");
     } else {
-        match args[1].as_str() {
-            "log" => {
-                command = Command::Log;
-                parameters.extend_from_slice(&args[2..]);
-            }
-            _ => {
-                command = Command::Search;
-                parameters.extend_from_slice(&args[1..]);
-            }
-        }
+        command = args[1].clone();
     }
-
-    ParsedArguments { command, parameters }
+    if commands.contains_key(&command) {
+        ParsedArguments {
+            command: commands.get(&command).unwrap().clone(),
+            parameters: args[2..].to_vec(),
+        }
+    } else {
+        panic!("No default command");
+            
+    }
 }

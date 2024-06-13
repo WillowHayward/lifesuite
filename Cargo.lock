@@ -74,17 +74,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "horace"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_derive",
- "serde_json",
- "uuid",
-]
-
-[[package]]
 name = "iana-time-zone"
 version = "0.1.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -127,6 +116,30 @@ name = "libc"
 version = "0.2.155"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+
+[[package]]
+name = "lifesuite-journal-cli"
+version = "0.1.0"
+dependencies = [
+ "lifesuite_common",
+ "lifesuite_journal_lib",
+]
+
+[[package]]
+name = "lifesuite_common"
+version = "0.1.0"
+
+[[package]]
+name = "lifesuite_journal_lib"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "lifesuite_common",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "uuid",
+]
 
 [[package]]
 name = "log"

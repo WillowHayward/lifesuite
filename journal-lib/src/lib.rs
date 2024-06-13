@@ -5,6 +5,7 @@ extern crate serde_json;
 
 pub mod log;
 pub mod person;
+pub mod commands;
 pub mod place;
 pub mod tag;
 pub mod io;
