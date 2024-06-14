@@ -1,31 +1,11 @@
-use std::collections::HashMap;
-use std::fs;
+use std::{collections::{HashMap, HashSet}, fs};
 
-use crate::log::Log;
 use lifesuite_common::settings::EnvVar;
-use crate::traits::named::Named;
 
-pub fn write_log(log: &Log) {
-    let json = serde_json::to_string(&log).unwrap_or("".to_string());
+use crate::{log::Log, traits::named::Named};
 
-    if json == "" {
-        println!("Failed to convert log to JSON");
-        return;
-    }
 
-    let path = format!("{}/{}.json", EnvVar::HoraceDir.get(), log.id.to_string());
-    fs::write(path, &json).expect("Unable to write file");
-    add_to_index(log);
-}
-
-pub fn read_log(id: &str) -> Log {
-    let path = format!("{}/{}.json", EnvVar::HoraceDir.get(), id);
-    let json = fs::read_to_string(path).expect("Unable to read file");
-    let log: Log = serde_json::from_str(&json).expect("Unable to parse JSON");
-    return log;
-}
-
-struct Index {
+pub struct Index {
     pub tags: HashMap<String, Vec<String>>,
     pub people: HashMap<String, Vec<String>>,
     pub places: HashMap<String, Vec<String>>,
@@ -47,7 +27,7 @@ impl NamedIndex {
     }
 }
 
-fn add_to_index(log: &Log) {
+pub fn add_to_index(log: &Log) {
     let tags: Vec<String> = log.tags.iter().map(|n| n.name().to_string()).collect();
     add_to_named_index(NamedIndex::Tags.to_string(), &log.id.to_string(), tags);
     let people: Vec<String> = log.people.iter().map(|n| n.name().to_string()).collect();
@@ -100,4 +80,17 @@ fn write_named_index(named_index: &str, index: HashMap<String, Vec<String>>) {
     let path = format!("{}/{}.json", EnvVar::HoraceDir.get(), named_index);
     let json = serde_json::to_string(&index).unwrap_or("".to_string());
     fs::write(path, &json).expect("Unable to write file");
+}
+
+pub fn search_index(index: HashMap<String, Vec<String>>, term: &str) -> HashSet<String> {
+    let mut ids: HashSet<String> = HashSet::new();
+
+    let trimmed_term: String = term.chars().skip(1).collect();
+    let found_ids = index.get(&trimmed_term);
+    if found_ids.is_some() {
+        for id in found_ids.unwrap() {
+            ids.insert(id.clone());
+        }
+    }
+    return ids;
 }

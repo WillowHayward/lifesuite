@@ -3,13 +3,21 @@ extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 
-pub mod log;
-pub mod person;
+pub mod log {
+    pub mod log;
+    pub use log::*;
+    pub mod search;
+}
+
+pub mod tag {
+    pub mod tag;
+    pub use tag::*;
+    pub mod entity;
+    pub mod context;
+}
+
 pub mod commands;
-pub mod place;
-pub mod tag;
-pub mod io;
-pub mod search;
+pub mod index;
 
 pub mod traits {
     pub mod named;
