@@ -1,94 +1,187 @@
 use std::collections::HashMap;
 
-pub struct ParsedArguments {
+pub struct ParsedCommand {
     pub command: fn(Vec<String>),
     pub parameters: Vec<String>,
 }
 
+/// Parses command line arguments into a `ParsedCommand` struct.
+///
+/// # Arguments
+///
+/// * `args` - A vector of strings representing the command line arguments. If the first element is
+/// a key in the `commands` map, it is treated as the command string. Otherwise, all elements will
+/// be treated as parameters for the detfault command.
+/// * `commands` - A map from command strings to the corresponding command functions. The map should
+/// contain a default command with the key `""`.
+///
+/// # Returns
+///
+/// * `Ok(ParsedCommand)` - If the command is found in the `commands` map, or if a default command
+/// is available. The `ParsedCommand` struct contains the command function and its parameters.
+/// * `Err(String)` - If the command is not found in the `commands` map and there is no default
+/// command. The error string is "No matching or default command found".
+///
+/// # Examples
+///
+/// ```
+/// let mut commands = HashMap::new();
+/// commands.insert("".to_string(), default_command as fn(Vec<String>));
+/// commands.insert("test".to_string(), test_command as fn(Vec<String>));
+///
+/// let args = vec!["test".to_string(), "arg1".to_string(), "arg2".to_string()];
+/// let parsed_command = parse_command(args, commands).unwrap();
+/// ```
 pub fn parse_command(
     args: Vec<String>,
-    commands: HashMap<String, fn(Vec<String>)>, // NOTE: Map must have "" for default command
-) -> ParsedArguments {
+    commands: HashMap<String, fn(Vec<String>)>,
+) -> Result<ParsedCommand, String> {
     let mut command_str: String;
     if args.len() == 0 {
         command_str = String::from("");
     } else {
-        command_str = args[1].clone();
+        command_str = args[0].clone();
     }
 
     let parameters: Vec<String>;
     if commands.contains_key(&command_str) {
-        parameters = args[2..].to_vec();
+        parameters = args[1..].to_vec();
     } else {
         command_str = String::from("");
         parameters = args.clone();
     }
 
     match commands.get(&command_str) {
-        Some(command) => ParsedArguments {
+        Some(command) => Ok(ParsedCommand {
             command: *command,
             parameters,
-        },
-        None => panic!("Command map must contain \"\" key for default command"),
+        }),
+        None => Err("No matching or default command found".to_string()),
     }
 }
 
-pub fn run_command(
-    args: Vec<String>,
-    commands: HashMap<String, fn(Vec<String>)>, // NOTE: Map must have "" for default command
-) {
-    let parsed_args: ParsedArguments = parse_command(args, commands);
+/// Parses command line arguments and runs the corresponding command.
+///
+/// # Arguments
+///
+/// * `args` - A vector of strings representing the command line arguments. If the first element is
+/// a key in the `commands` map, it is treated as the command string. Otherwise, all elements will
+/// be treated as parameters for the detfault command.
+/// * `commands` - A map from command strings to the corresponding command functions. The map should
+/// contain a default command with the key `""`.
+///
+/// # Examples
+///
+/// ```
+/// let mut commands = HashMap::new();
+/// commands.insert("".to_string(), default_command as fn(Vec<String>));
+/// commands.insert("test".to_string(), test_command as fn(Vec<String>));
+///
+/// run_command(vec!["arg1".to_string(), "arg2".to_string()], commands);
+/// // This will call default_command with the parameters ["arg1", "arg2"]
+///
+/// run_command(vec!["test".to_string(), "arg1".to_string(), "arg2".to_string()], commands);
+/// // This will call test_command with the parameters ["arg1", "arg2"]
+/// ```
+pub fn run_command(args: Vec<String>, commands: HashMap<String, fn(Vec<String>)>) {
+    let parsed_args: ParsedCommand = parse_command(args, commands).unwrap();
     let cmd = parsed_args.command;
     cmd(parsed_args.parameters);
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::cell::Cell;
 
-    fn test_command(_args: Vec<String>) {}
+    use super::*;
 
     #[test]
     fn test_parse_command() {
+        let default_command: fn(Vec<String>) = |_args| {};
+        let test_command: fn(Vec<String>) = |_args| {};
+
         let mut commands = HashMap::new();
-        commands.insert("".to_string(), test_command as fn(Vec<String>));
-        commands.insert("test".to_string(), test_command as fn(Vec<String>));
-
-        let args = vec!["program".to_string(), "test".to_string(), "arg1".to_string(), "arg2".to_string()];
-        let parsed_args = parse_command(args.clone(), commands.clone());
-        assert_eq!(parsed_args.parameters, args[2..]);
-
-        let args = vec!["program".to_string()];
-        let parsed_args = parse_command(args.clone(), commands.clone());
-        assert_eq!(parsed_args.parameters, args);
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["test".to_string(), "arg1".to_string(), "arg2".to_string()];
+        let parsed_command = parse_command(args, commands).unwrap();
+        assert_eq!(parsed_command.command, test_command);
+        assert_eq!(
+            parsed_command.parameters,
+            vec!["arg1".to_string(), "arg2".to_string()]
+        );
     }
 
     #[test]
-    #[should_panic(expected = "Command map must contain \"\" key for default command")]
-    fn test_parse_command_no_default() {
-        let commands = HashMap::new();
-        let args = vec!["program".to_string()];
-        let _parsed_args = parse_command(args.clone(), commands.clone());
+    fn test_parse_command_default() {
+        let default_command: fn(Vec<String>) = |_args| {};
+        let test_command: fn(Vec<String>) = |_args| {};
+
+        let mut commands = HashMap::new();
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["arg1".to_string(), "arg2".to_string()];
+        let parsed_command = parse_command(args, commands).unwrap();
+        assert_eq!(parsed_command.command, default_command);
+        assert_eq!(
+            parsed_command.parameters,
+            vec!["arg1".to_string(), "arg2".to_string()]
+        );
     }
 
+    #[test]
+    #[should_panic]
+    fn test_parse_command_no_default() {
+        let test_command: fn(Vec<String>) = |_args| {};
+
+        let mut commands = HashMap::new();
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["arg1".to_string(), "arg2".to_string()];
+        parse_command(args, commands).unwrap();
+    }
+
+    // TODO: The run_command tests could be improved with mocks to ensure that the correct commands
+    // are being called
     #[test]
     fn test_run_command() {
+        let default_command: fn(Vec<String>) = |_args| {
+            panic!("This should not be called");
+        };
+        let test_command: fn(Vec<String>) = |_args| {
+            assert_eq!(vec!["arg1".to_string(), "arg2".to_string()], _args);
+        };
+
         let mut commands = HashMap::new();
-        commands.insert("".to_string(), test_command as fn(Vec<String>));
-        commands.insert("test".to_string(), test_command as fn(Vec<String>));
-
-        let args = vec!["program".to_string(), "test".to_string(), "arg1".to_string(), "arg2".to_string()];
-        run_command(args.clone(), commands.clone());
-
-        let args = vec!["program".to_string()];
-        run_command(args.clone(), commands.clone());
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["test".to_string(), "arg1".to_string(), "arg2".to_string()];
+        run_command(args, commands);
     }
 
     #[test]
-    #[should_panic(expected = "Command map must contain \"\" key for default command")]
+    fn test_run_command_default() {
+        let default_command: fn(Vec<String>) = |_args| {
+            assert_eq!(vec!["arg1".to_string(), "arg2".to_string()], _args);
+        };
+        let test_command: fn(Vec<String>) = |_args| {
+            panic!("This should not be called");
+        };
+
+        let mut commands = HashMap::new();
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["arg1".to_string(), "arg2".to_string()];
+        run_command(args, commands);
+    }
+
+    #[test]
+    #[should_panic]
     fn test_run_command_no_default() {
-        let commands = HashMap::new();
-        let args = vec!["program".to_string()];
-        run_command(args.clone(), commands.clone());
+        let test_command: fn(Vec<String>) = |_args| {};
+
+        let mut commands = HashMap::new();
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["arg1".to_string(), "arg2".to_string()];
+        run_command(args, commands);
     }
 }
