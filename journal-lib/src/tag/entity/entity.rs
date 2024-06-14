@@ -1,19 +1,19 @@
 use crate::traits::named::Named;
 
 #[derive(Serialize, Deserialize)]
-pub struct Person {
+pub struct Entity {
     pub name: String,
 }
 
-impl Named for Person {
+impl Named for Entity {
     fn name(&self) -> &str {
         &self.name
     }
 }
 
-pub fn parse_person(person: &str) -> Person {
-    return Person {
-        name: person.to_string(),
+pub fn parse_entity(entity: &str) -> Entity {
+    return Entity {
+        name: entity.to_string(),
     };
 }
 

@@ -7,8 +7,8 @@ use uuid::Uuid;
 use crate::index::add_to_index;
 use crate::log::search::search_logs;
 use crate::tag::{Tag, parse_tag};
-use crate::tag::entity::{Person, parse_person};
-use crate::tag::context::{Place, parse_location};
+use crate::tag::entity::{Entity, parse_entity};
+use crate::tag::context::{Context, parse_context};
 
 #[derive(Serialize, Deserialize)]
 pub struct Log {
@@ -16,8 +16,8 @@ pub struct Log {
     pub date: DateTime<Local>,
     pub text: String,
     pub tags: Vec<Tag>,
-    pub people: Vec<Person>,
-    pub places: Vec<Place>,
+    pub entities: Vec<Entity>,
+    pub contexts: Vec<Context>,
 }
 
 pub fn build_log(log: &[String]) -> Log {
@@ -25,18 +25,18 @@ pub fn build_log(log: &[String]) -> Log {
     let date = Local::now();
     let text = log.join(" ");
     let mut tags: Vec<Tag> = Vec::new();
-    let mut people: Vec<Person> = Vec::new();
-    let mut places: Vec<Place> = Vec::new();
+    let mut entities: Vec<Entity> = Vec::new();
+    let mut contexts: Vec<Context> = Vec::new();
     for part in log {
         if part.starts_with("+") {
             let tag = parse_tag(&part[1..]);
             tags.push(tag);
         } else if part.starts_with("@") {
-            let person = parse_person(&part[1..]);
-            people.push(person);
+            let entity = parse_entity(&part[1..]);
+            entities.push(entity);
         } else if part.starts_with("%") {
-            let place = parse_location(&part[1..]);
-            places.push(place);
+            let context = parse_context(&part[1..]);
+            contexts.push(context);
         }
     }
 
@@ -45,8 +45,8 @@ pub fn build_log(log: &[String]) -> Log {
         date,
         text,
         tags,
-        people,
-        places,
+        entities,
+        contexts,
     };
 }
 
@@ -83,11 +83,11 @@ pub fn display_logs(search: &[String]) {
                 println!("        Value: {}", value);
             }
         }
-        for person in &log.people {
-            println!("    Person: {}", person.name);
+        for entity in &log.entities {
+            println!("    Entity: {}", entity.name);
         }
-        for place in &log.places {
-            println!("    Place: {}", place.name);
+        for context in &log.contexts {
+            println!("    Context: {}", context.name);
         }
     }
 }

@@ -1,19 +1,19 @@
 use crate::traits::named::Named;
 
 #[derive(Serialize, Deserialize)]
-pub struct Place {
+pub struct Context {
     pub name: String,
 }
 
-impl Named for Place {
+impl Named for Context {
     fn name(&self) -> &str {
         &self.name
     }
 }
 
 
-pub fn parse_location(location: &str) -> Place {
-    return Place {
-        name: location.to_string(),
+pub fn parse_context(context: &str) -> Context {
+    return Context {
+        name: context.to_string(),
     };
 }
