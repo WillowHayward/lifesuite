@@ -25,3 +25,12 @@ pub fn parse_args(
             
     }
 }
+
+pub fn run_command_from_args(
+    args: Vec<String>,
+    commands: HashMap<String, fn(Vec<String>)>, // NOTE: Map must have "" for default command
+) {
+    let parsed_args: ParsedArguments = parse_args(args, commands);
+    let cmd = parsed_args.command;
+    cmd(parsed_args.parameters);
+}
