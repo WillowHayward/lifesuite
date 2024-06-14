@@ -9,11 +9,11 @@ fn add(args: Vec<String>) {
     println!("Wrote log {} to file", log.id);
 }
 
-fn edit(args: Vec<String>) {
+fn edit(_args: Vec<String>) {
     todo!();
 }
 
-fn modify(args: Vec<String>) {
+fn modify(_args: Vec<String>) {
     todo!();
 }
 
