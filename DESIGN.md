@@ -21,13 +21,9 @@ This is a living document detailing the design of Horace
         3.1.2 - edit
         3.1.3 - delete
         3.1.4 - list
-    3.2 - log
+    3.2 - add
     3.3 - edit
     3.4 - modify
-    3.5 - logs
-        3.5.1 - add
-        3.5.2 - edit
-        3.5.3 - delete
     3.6 - tag
         3.5.1 - add
         3.5.2 - edit
