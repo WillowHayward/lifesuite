@@ -1,6 +1,6 @@
-# Horace - A Life Journal
+# LifeSuite Journal
 
-This is a living document detailing the design of Horace
+This is a living document detailing the design of LifeSuite Journal
 
 ## Contents
 1 - Introduction
