@@ -4,6 +4,11 @@ use lifesuite_common::command::run_command;
 use lifesuite_journal_lib::commands;
 
 fn main() {
-    let cli_args = env::args().collect();
-    run_command(cli_args, commands::get_commands());
+    let cli_args: Vec<String> = env::args().collect();
+    let command_args = if cli_args.len() > 1 {
+        cli_args[1..].to_vec() // Trim program name
+    } else {
+        Vec::new() // No arguments were passed
+    };
+    run_command(command_args, commands::get_commands());
 }
