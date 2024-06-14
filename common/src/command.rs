@@ -45,7 +45,11 @@ pub fn parse_command(
 
     let parameters: Vec<String>;
     if commands.contains_key(&command_str) {
-        parameters = args[1..].to_vec();
+        parameters = if args.len() > 1 {
+            args[1..].to_vec()
+        } else {
+            Vec::new()
+        }
     } else {
         command_str = String::from("");
         parameters = args.clone();
@@ -159,6 +163,23 @@ mod tests {
     }
 
     #[test]
+    fn test_run_command_no_args() {
+        let default_command: fn(Vec<String>) = |_args| {
+            panic!("This should not be called");
+        };
+        let test_command: fn(Vec<String>) = |_args| {
+            let empty_args: Vec<String> = Vec::new();
+            assert_eq!(empty_args, _args);
+        };
+
+        let mut commands = HashMap::new();
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args = vec!["test".to_string()];
+        run_command(args, commands);
+    }
+
+    #[test]
     fn test_run_command_default() {
         let default_command: fn(Vec<String>) = |_args| {
             assert_eq!(vec!["arg1".to_string(), "arg2".to_string()], _args);
@@ -173,6 +194,24 @@ mod tests {
         let args = vec!["arg1".to_string(), "arg2".to_string()];
         run_command(args, commands);
     }
+
+    #[test]
+    fn test_run_command_default_no_args() {
+        let default_command: fn(Vec<String>) = |_args| {
+            let empty_args: Vec<String> = Vec::new();
+            assert_eq!(empty_args, _args);
+        };
+        let test_command: fn(Vec<String>) = |_args| {
+            panic!("This should not be called");
+        };
+
+        let mut commands = HashMap::new();
+        commands.insert("".to_string(), default_command);
+        commands.insert("test".to_string(), test_command);
+        let args: Vec<String> = Vec::new();
+        run_command(args, commands);
+    }
+
 
     #[test]
     #[should_panic]
