@@ -95,8 +95,6 @@ pub fn run_command(args: Vec<String>, commands: HashMap<String, fn(Vec<String>)>
 
 #[cfg(test)]
 mod tests {
-    use std::cell::Cell;
-
     use super::*;
 
     #[test]
