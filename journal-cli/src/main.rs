@@ -1,6 +1,6 @@
 use std::env;
 
-use lifesuite_common::command::run_command;
+use lifesuite_common::commands::run_command;
 use lifesuite_journal_lib::commands;
 
 fn main() {

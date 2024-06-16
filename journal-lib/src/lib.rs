@@ -7,6 +7,8 @@ pub mod commands;
 pub mod index;
 
 pub mod journal {
+    pub mod journal;
+    pub use journal::*;
     pub mod commands;
 }
 
@@ -15,26 +17,26 @@ pub mod log {
     pub use log::*;
     pub mod commands;
     pub mod search;
+    pub mod opts;
 }
 
 pub mod tag {
     pub mod tag;
     pub use tag::*;
     pub mod commands;
+    pub mod values;
 
     pub mod entity {
-        pub mod entity;
-        pub use entity::*;
         pub mod commands;
     }
     pub mod context {
-        pub mod context;
-        pub use context::*;
         pub mod commands;
     }
 }
 
 pub mod template {
+    pub mod template;
+    pub use template::*;
     pub mod commands;
 }
 
