@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::component::ComponentMeta;
+use crate::component::{ComponentMeta, ComponentType};
 
 #[derive(Serialize, Deserialize)]
 pub struct Persona {
@@ -11,7 +11,7 @@ pub struct Persona {
 impl Persona {
     pub fn new(name: String) -> Persona {
         Persona { 
-            meta: ComponentMeta::new(),
+            meta: ComponentMeta::new(ComponentType::Persona),
             name,
         }
     }

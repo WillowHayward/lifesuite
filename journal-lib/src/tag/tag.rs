@@ -15,9 +15,9 @@ impl JournalTag {
         let parts: Vec<&str> = raw.split(":").collect();
         let full_name: &str = parts[0];
 
-        let tag: Tag = match Tag::get_by_full_name(full_name, &journal.parent) {
+        let tag: Tag = match Tag::get_by_full_name(full_name, &journal.persona) {
             Some(existing_tag) => existing_tag,
-            None => Tag::new(full_name, &journal.parent)
+            None => Tag::new(full_name, &journal.persona)
         };
 
         let value = if parts.len() > 1 {

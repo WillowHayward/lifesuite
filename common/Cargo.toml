@@ -9,3 +9,4 @@ chrono = { version = "0.4", features = ["serde"] }
 serde = "1.0.203"
 serde_derive = "1.0.203"
 serde_json = "1.0.117"
+sqlite = "0.36.0"

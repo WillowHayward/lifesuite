@@ -1,4 +1,4 @@
-use crate::component::ComponentMeta;
+use crate::component::{ComponentMeta, ComponentType};
 
 #[derive(Serialize, Deserialize)]
 pub enum ChangeType {
@@ -36,7 +36,7 @@ pub struct Mod<T> {
 impl<T> Mod<T> {
     pub fn new(changes: Vec<Change<T>>) -> Mod<T> {
         Mod {
-            meta: ComponentMeta::new(),
+            meta: ComponentMeta::new(ComponentType::Mod),
             changes,
         }
     }

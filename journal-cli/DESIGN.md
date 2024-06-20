@@ -149,9 +149,21 @@ A rule has the following properties, stored in the `rules` property of the tag t
  - required - a boolean value representing if a value must be attached to instances of this tag
  - default - the value assigned to an instance of this tag if one is not specified
  - prompt - a boolean value representing if the user should be prompted to provide a value
- - type - the type of the tag  - number, string, boolean, date, scalar (for any scalar type), list, or map.
+ - type - the type of the tag  - none (to never accept values), number, string, boolean, date, list, or map.
  - values - acceptable values for this tag. Depending on the type of the tag, this may come in multiple different formats.
-    - for scalar values, this will be an array of values that can be accepted
+    - for numbers, this will be 
+        - min - the smallest valid number
+        - max - the largest valid number
+        - values - an array of accepted numbers // TODO: Rename from "values"? "one_of"?
+    - for strings, this will be 
+        - min_length - the smallest valid string length
+        - max_length - the largest valid string length
+        - values - an array of accepted strings // TODO: rename blah blah blah, see the other todos
+    - for none and booleans you cannot set this rule, for obvious reasons
+    - for dates, this will be
+        - min - the earliest valid date
+        - max - the latest valid date
+        - values - an array of accepted dates // TODO: Rename from "values"? "one_of"?
     - for lists, see "list value rules" below
     - for maps, see "map value rules" below
  - values - a list of acceptable values for this tag (scalar only)
@@ -187,7 +199,7 @@ Mods are created when a change is made by any `edit` command
 Properties:
  - id - a uuid generated on creation
  - created - the timestamp of when this mod was created
- - target - the id of the target journal, log, tag, template, or event
+ - target - the id of the target journal, log, tag, template, or event // TODO: Other components now have a list of mods applied to them, and 1 mod can be applied to multiple components
  - changes - an array of changes in the form of objects with the following properties
     - target - the property this change is targeting (e.g. "entry" for a log, "name" for named components). For changes to subproperties, this will include a list of all ancestory property changes separated by `.` (e.g. `grandparent.parent.property`), and for changes to individual
     - type - What type of change this was (create, remove, or modify)

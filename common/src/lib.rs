@@ -10,6 +10,13 @@ pub mod tag;
 pub mod component;
 pub mod persona;
 
+pub mod export;
+pub mod db {
+    pub mod db;
+    pub use db::*;
+    pub mod tables;
+}
+
 pub mod opts;
 
 pub mod traits;

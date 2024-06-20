@@ -1,14 +1,15 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+
+pub mod ledger {
+    pub mod ledger;
+    pub use ledger::*;
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod account {
+    pub mod account;
+    pub use account::*;
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub mod transaction {
+    pub mod transaction;
+    pub use transaction::*;
 }

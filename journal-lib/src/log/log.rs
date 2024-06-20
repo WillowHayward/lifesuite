@@ -1,5 +1,5 @@
 use chrono::{DateTime, Local};
-use lifesuite_common::component::ComponentMeta;
+use lifesuite_common::component::{ComponentMeta, ComponentType};
 use lifesuite_common::tag::{Tag, TagType};
 use uuid::Uuid;
 
@@ -12,7 +12,7 @@ pub struct Log {
     pub date: DateTime<Local>,
     pub entry: String,
     pub tags: Vec<JournalTag>,
-    pub parent: Uuid, // id of journal that owns this log
+    pub journal: Uuid, // id of journal that owns this log
 }
 
 impl Log {
@@ -27,11 +27,11 @@ impl Log {
         }
 
         Log {
-            meta: ComponentMeta::new(),
+            meta: ComponentMeta::new(ComponentType::Log),
             date: Local::now(),
             entry: entry.join(" "),
             tags,
-            parent: journal.meta.id,
+            journal: journal.meta.id,
         }
     }
 

@@ -1,4 +1,4 @@
-use lifesuite_common::{component::ComponentMeta, persona::Persona};
+use lifesuite_common::{component::{ComponentMeta, ComponentType}, persona::Persona};
 use uuid::Uuid;
 
 pub fn add(_args: Vec<String>) {
@@ -23,16 +23,16 @@ pub fn set(_args: Vec<String>) {
 
 pub struct Journal {
     pub meta: ComponentMeta,
+    pub persona: Uuid, // The id of the persona this journal belongs to
     pub name: String,
-    pub parent: Uuid,
 }
 
 impl Journal {
     pub fn new(name: String, persona: &Persona) -> Journal {
         Journal {
-            meta: ComponentMeta::new(),
+            meta: ComponentMeta::new(ComponentType::Journal),
             name,
-            parent: persona.meta.id,
+            persona: persona.meta.id,
         }
     }
 

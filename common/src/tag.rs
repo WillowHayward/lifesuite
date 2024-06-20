@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::{component::ComponentMeta, persona::Persona};
+use crate::{component::{ComponentMeta, ComponentType}, persona::Persona};
 
 #[derive(Serialize, Deserialize)]
 pub enum TagType {
@@ -9,31 +9,43 @@ pub enum TagType {
     Context,
 }
 
+impl TagType {
+    pub fn get_id(&self) -> i32 {
+        match self {
+            TagType::Tag => 0,
+            TagType::Entity => 1,
+            TagType::Context => 2,
+        }
+    }
+}
+
 // A tag, including entities and contexts, without an attached value
 #[derive(Serialize, Deserialize)]
 pub struct Tag {
     pub meta: ComponentMeta,
+    pub persona: Uuid, // The id of the persona this tag belongs to
     pub tag_type: TagType,
     pub name: String, // The name of the tag, excluding signifier (+/@/%), but including any
     // parent tags (e.g. "tag.subtag.subsubtag")
-    pub parent: Uuid, // Either the parent tag (the one to the left by ".") or the persona id
+    pub parent: Option<Uuid>, // Either the id of the parent tag (the one to the left by ".") or
+    // null if this is a top-level tag
 }
 
 impl Tag {
     pub fn new(full_name: &str, persona: &Uuid) -> Tag {
-        let parent = if full_name.contains(".") {
+        let parent: Option<Uuid> = if full_name.contains(".") {
             let parts: Vec<&str> = full_name.split(".").collect();
             let parent_name = parts[0..parts.len() - 1].join(".");
             match Tag::get_by_full_name(&parent_name, &persona) {
-                Some(tag) => tag.meta.id,
-                None => Tag::new(&parent_name, &persona).meta.id,
+                Some(tag) => Some(tag.meta.id),
+                None => Some(Tag::new(&parent_name, &persona).meta.id),
             }
         } else {
-            // TODO: Check dereferencing here
-            *persona
+            None
         };
         Tag {
-            meta: ComponentMeta::new(),
+            meta: ComponentMeta::new(ComponentType::Tag),
+            persona: *persona, // TODO: Check dereferencing here
             tag_type: Tag::get_tag_type(full_name),
             name: full_name[1..].to_string(), // Signifier not stored with name
             parent,

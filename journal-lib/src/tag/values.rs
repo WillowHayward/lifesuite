@@ -6,6 +6,6 @@ pub enum ValueType {
     Map
 }
 
-pub struct JournalValue {
+pub struct JournalTagValue {
 
 }

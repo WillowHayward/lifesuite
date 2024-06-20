@@ -25,6 +25,7 @@ pub mod tag {
     pub use tag::*;
     pub mod commands;
     pub mod values;
+    pub mod rules;
 
     pub mod entity {
         pub mod commands;

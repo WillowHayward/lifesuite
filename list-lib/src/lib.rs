@@ -1,14 +1,12 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+pub mod almanac {
+    pub mod almanac;
+    pub use almanac::*;
+}
+pub mod list {
+    pub mod list;
+    pub use list::*;
+    pub mod commands;
+    pub mod path;
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub mod commands;
