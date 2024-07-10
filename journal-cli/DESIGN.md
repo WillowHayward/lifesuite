@@ -133,6 +133,7 @@ There are several different value types for tags.
  - string - Any number of utf-8 characters. Can be quoted to allow shell-unsafe characters.
  - boolean - true or false.
 `<value>` can be any of formats/types
+ - another tag
  - date - [TODO] - Modified ISO 8601 (replacing `:` with `-`, allow partial values, allow US/AU dates, etc), 24hr time, am/pm
  - list - An array of scalar values, separated with `,` (e.g. `+tag:value1,value2,value3`). Lists of a single item are denoted by suffixing them with `,` (e.g. `+tag:value,`).
  - map - A set of key-value pairs, with `:` seperating keys and values, and `,` separating pairs (e.g. `+tag:key1:value1:key2:value2`). Maps are denoted in a log by being preceded separated from the tag with `::`.

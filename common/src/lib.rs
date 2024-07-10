@@ -4,11 +4,25 @@ extern crate serde;
 extern crate serde_json;
 
 pub mod commands;
-pub mod settings;
 pub mod r#mod;
-pub mod tag;
-pub mod component;
-pub mod persona;
+pub mod settings;
+pub mod tag {
+    pub mod tag;
+    pub use tag::*;
+    pub mod db;
+}
+
+pub mod component {
+    pub mod component;
+    pub use component::*;
+    pub mod db;
+}
+
+pub mod persona {
+    pub mod persona;
+    pub use persona::*;
+    pub mod db;
+}
 
 pub mod export;
 pub mod db {

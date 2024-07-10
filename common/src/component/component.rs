@@ -1,7 +1,10 @@
+use std::collections::HashSet;
+
 use chrono::{DateTime, Local};
+use sqlite::Connection;
 use uuid::Uuid;
 
-use crate::{export::ExportFormat, r#mod::Change, traits::Diff};
+use crate::{export::ExportFormat, r#mod::Change, traits::{Diff, LocalDbTable}};
 
 // TODO: Check how this serialization/deserialization works - string vs num
 #[derive(Serialize, Deserialize)]
@@ -86,6 +89,27 @@ impl ComponentMeta {
             ExportFormat::Json => export_json(self),
             ExportFormat::Sql => export_sql(self),
         }
+    }
+}
+
+impl LocalDbTable for ComponentMeta {
+    fn table_name() -> &'static str {
+        "component"
+    }
+    fn dependencies() -> HashSet<HashSet<&'static str>> {
+        HashSet::new()
+    }
+    fn create(connection: Connection) -> Result<(), sqlite::Error> {
+        connection.execute(
+            "CREATE TABLE component (
+            id TEXT PRIMARY KEY,
+            component_type INTEGER,
+            created TEXT,
+            edited TEXT,
+            synced TEXT
+        )",
+        )?;
+        Ok(())
     }
 }
 
