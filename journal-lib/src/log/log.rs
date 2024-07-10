@@ -6,6 +6,10 @@ use uuid::Uuid;
 use crate::journal::Journal;
 use crate::tag::JournalTag;
 
+pub fn read_log(_opts: &str) -> Log {
+    todo!();
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Log {
     pub meta: ComponentMeta,

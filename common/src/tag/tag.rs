@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::{component::{ComponentMeta, ComponentType}, persona::Persona};
+use crate::{component::{ComponentMeta, ComponentType}};
 
 #[derive(Serialize, Deserialize)]
 pub enum TagType {

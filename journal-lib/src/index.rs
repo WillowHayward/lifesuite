@@ -27,13 +27,15 @@ impl NamedIndex {
     }
 }
 
-pub fn add_to_index(log: &Log) {
-    let tags: Vec<String> = log.tags.iter().map(|n| n.name().to_string()).collect();
+pub fn add_to_index(_log: &Log) {
+    todo!()
+    /*let tags: Vec<String> = log.tags.iter().map(|n| n.name().to_string()).collect();
     add_to_named_index(NamedIndex::Tags.to_string(), &log.id.to_string(), tags);
     let people: Vec<String> = log.entities.iter().map(|n| n.name().to_string()).collect();
     add_to_named_index(NamedIndex::People.to_string(), &log.id.to_string(), people);
     let places: Vec<String> = log.contexts.iter().map(|n| n.name().to_string()).collect();
     add_to_named_index(NamedIndex::Places.to_string(), &log.id.to_string(), places);
+    */
 }
 
 fn add_to_named_index(index_type: &str, id: &str, names: Vec<String>) {
