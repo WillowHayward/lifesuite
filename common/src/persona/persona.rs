@@ -3,8 +3,7 @@ use std::collections::HashSet;
 use uuid::Uuid;
 
 use crate::{
-    component::{db::ComponentTable, ComponentMeta, ComponentType},
-    db::Db,
+    component::{ComponentMeta, ComponentType},
     traits::LocalDbTable,
 };
 
@@ -39,10 +38,11 @@ impl LocalDbTable for Persona {
     fn table_name() -> &'static str {
         "persona"
     }
-    fn dependencies() -> HashSet<&'static str> {
-        let mut deps = HashSet::new();
+    fn dependencies() -> HashSet<HashSet<&'static str>> {
+        todo!();
+        /*let mut deps = HashSet::new();
         deps.insert(ComponentTable::table_name());
-        deps
+        deps*/
     }
 
     fn create(connection: sqlite::Connection) -> Result<(), sqlite::Error> {

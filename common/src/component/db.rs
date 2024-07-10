@@ -13,9 +13,8 @@ impl LocalDbTable for ComponentTable {
     }
 
 
-    fn dependencies() -> HashSet<&'static str> {
-        let deps = HashSet::new();
-        deps
+    fn dependencies() -> HashSet<HashSet<&'static str>> {
+        todo!()
     }
 
     fn create(connection: Connection) -> Result<(), sqlite::Error> {
